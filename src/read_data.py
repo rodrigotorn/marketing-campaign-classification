@@ -23,7 +23,7 @@ def read_data(**kargs):
   df['Dt_Customer'] = pd.to_datetime(
     df['Dt_Customer'],
     format='%Y-%m-%d',
-  )
+  ).astype(int)
   df.drop(columns=['Z_CostContact', 'Z_Revenue'], inplace=True)
   return df
 

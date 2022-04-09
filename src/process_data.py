@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
 from sklearn.impute import KNNImputer
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.decomposition import PCA
+from sklearn.feature_selection import VarianceThreshold
 
 
 def find_outliers(df: pd.DataFrame):
@@ -56,3 +57,23 @@ def calc_pca(df: pd.DataFrame):
     index=df.index,
   )
   return pd.concat([pca_df, df[['Response']]], axis = 1)
+
+
+def preprocess(df: pd.DataFrame):
+  x = df.drop(columns='Response')
+  x = pd.get_dummies(x,
+    columns=x.select_dtypes(include='category').columns.to_list()
+  )
+  kept_columns = \
+    VarianceThreshold(0.01).fit(x).get_feature_names_out(x.columns)
+  x = x[kept_columns]
+  scaler = MinMaxScaler()
+  return pd.DataFrame(
+    scaler.fit_transform(x),
+    index=x.index,
+    columns=x.columns,
+  )
+
+
+if __name__ == '__main__':
+  pass

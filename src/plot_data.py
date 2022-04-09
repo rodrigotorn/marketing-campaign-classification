@@ -39,3 +39,26 @@ def plot_pca(df: pd.DataFrame):
   ax.legend(targets)
   ax.grid()
   return fig
+
+
+def plot_overfit_analysis(
+  x: pd.Series,
+  train_scores: pd.Series,
+  test_scores: pd.Series,
+  x_label: str,
+  y_label: str,
+  title: str,
+):
+  f, ax = plt.subplots(figsize=(7, 5))
+  plt.plot(x, train_scores, '-o', label='Train')
+  plt.plot(x, test_scores, '-o', label='Test')
+  plt.legend()
+  plt.grid()
+  ax.set_xlabel(x_label, fontsize = 15)
+  ax.set_ylabel(y_label, fontsize = 15)
+  ax.set_title(title, fontsize = 20)
+  return f.show()
+
+
+if __name__ == '__main__':
+  pass
