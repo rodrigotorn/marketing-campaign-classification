@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.impute import KNNImputer
+from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import VarianceThreshold
@@ -47,22 +48,28 @@ def create_feature_accepted_any_cmp(df: pd.DataFrame):
 
 
 def calc_pca(df: pd.DataFrame):
-  numerical_features = df.select_dtypes(include=['int', 'float'])
-  standarzed_features = StandardScaler().fit_transform(numerical_features)
-
-  pca = PCA(n_components=2).fit_transform(standarzed_features)
-  pca_df = pd.DataFrame(
+  pca = PCA(n_components=2).fit_transform(df)
+  return pd.DataFrame(
     data=pca,
     columns=['pca1', 'pca2'],
     index=df.index,
   )
-  return pd.concat([pca_df, df[['Response']]], axis = 1)
+
+
+def kmeans_clustering(df: pd.DataFrame):
+  kmeans = KMeans(n_clusters=3, random_state=0)
+  clusters = kmeans.fit(df)
+  labels = pd.Series(clusters.labels_, index=df.index, name='Cluster')
+
+  return pd.concat([
+      df[['Income', 'NumAcceptedCmp', 'NumCatalogPurchases']],
+      labels,
+  ], axis=1)
 
 
 def preprocess(df: pd.DataFrame):
-  x = df.drop(columns='Response')
-  x = pd.get_dummies(x,
-    columns=x.select_dtypes(include='category').columns.to_list()
+  x = pd.get_dummies(df,
+    columns=df.select_dtypes(include='category').columns.to_list()
   )
   kept_columns = \
     VarianceThreshold(0.01).fit(x).get_feature_names_out(x.columns)

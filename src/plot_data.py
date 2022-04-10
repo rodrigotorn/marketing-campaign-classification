@@ -18,6 +18,14 @@ def plot_boxplot(df: pd.DataFrame, feature: str):
   return sns.boxplot(x='Response', y=feature, data=df)
 
 
+def plot_barplot_clusters(df: pd.DataFrame, features: list):
+  f, ax = plt.subplots(1, 3, figsize=(15, 5))
+  sns.barplot(ax=ax[0], x='Cluster', y=features[0], data=df)
+  sns.barplot(ax=ax[1], x='Cluster', y=features[1], data=df)
+  sns.barplot(ax=ax[2], x='Cluster', y=features[2], data=df)
+  return f
+
+
 def plot_pca(df: pd.DataFrame):
   fig = plt.figure(figsize = (7,5))
   ax = fig.add_subplot(1,1,1)
@@ -25,11 +33,11 @@ def plot_pca(df: pd.DataFrame):
   ax.set_xlabel('Principal Component 1', fontsize = 15)
   ax.set_ylabel('Principal Component 2', fontsize = 15)
   ax.set_title('2 component PCA', fontsize = 20)
-  targets = ['0', '1']
-  colors = ['r', 'g']
+  targets = ['0', '1', '2']
+  colors = ['b', 'y', 'g']
 
   for target, color in zip(targets, colors):
-    indicesToKeep = df['Response'].astype(str) == target
+    indicesToKeep = df['Cluster'].astype(str) == target
     ax.scatter(
       df.loc[indicesToKeep, 'pca1'],
       df.loc[indicesToKeep, 'pca2'],

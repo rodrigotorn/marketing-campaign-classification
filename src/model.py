@@ -9,10 +9,10 @@ def eval_model(x: pd.DataFrame, y: pd.Series, model):
     x,
     y,
     cv=skf,
-    scoring='balanced_accuracy',
+    scoring=['accuracy', 'balanced_accuracy'],
   )
-
-  return cv_results['test_score'].mean()
+  return (cv_results['test_accuracy'].mean(),
+            cv_results['test_balanced_accuracy'].mean())
 
 
 def grid_search_model(x: pd.DataFrame, y: pd.Series, model, params: dict):
