@@ -4,68 +4,70 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def plot_corr_matrix(df: pd.DataFrame):
+sns.set(style='whitegrid')
+
+
+def plot_corr_matrix(df: pd.DataFrame, title: str):
+  f, ax = plt.subplots(figsize=(11, 9))
+  ax.set_title(title)
+
   corr = df.corr()
   mask = np.triu(np.ones_like(corr, dtype=bool))
-  f, ax = plt.subplots(figsize=(11, 9))
   cmap = sns.diverging_palette(20, 230, as_cmap=True)
-  return sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
+
+  sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
     square=True, linewidths=.5, cbar_kws={"shrink": .5})
+  return f
 
 
-def plot_boxplot(df: pd.DataFrame, feature: str):
+def plot_boxplot(df: pd.DataFrame, feature: str, title: str):
   f, ax = plt.subplots(figsize=(7, 5))
-  return sns.boxplot(x='Response', y=feature, data=df)
+  ax.set_title(title)
+  sns.boxplot(x='Response', y=feature, data=df)
+  return f
 
 
-def plot_barplot_clusters(df: pd.DataFrame, features: list):
+def plot_barplot_clusters(df: pd.DataFrame, features: list, title: str):
   f, ax = plt.subplots(1, 3, figsize=(15, 5))
+  f.suptitle(title)
+
   sns.barplot(ax=ax[0], x='Cluster', y=features[0], data=df)
   sns.barplot(ax=ax[1], x='Cluster', y=features[1], data=df)
   sns.barplot(ax=ax[2], x='Cluster', y=features[2], data=df)
   return f
 
 
-def plot_pca(df: pd.DataFrame):
-  fig = plt.figure(figsize = (7,5))
-  ax = fig.add_subplot(1,1,1)
+def plot_pca(df: pd.DataFrame, title: str):
+  f, ax = plt.subplots(figsize=(7, 5))
+  ax.set_title(title)
+  ax.set_xlabel('PCA1')
+  ax.set_ylabel('PCA2')
 
-  ax.set_xlabel('Principal Component 1', fontsize = 15)
-  ax.set_ylabel('Principal Component 2', fontsize = 15)
-  ax.set_title('2 component PCA', fontsize = 20)
-  targets = ['0', '1', '2']
-  colors = ['b', 'y', 'g']
-
-  for target, color in zip(targets, colors):
-    indicesToKeep = df['Cluster'].astype(str) == target
-    ax.scatter(
-      df.loc[indicesToKeep, 'pca1'],
-      df.loc[indicesToKeep, 'pca2'],
-      c = color,
-      s = 50,
-    )
-  ax.legend(targets)
-  ax.grid()
-  return fig
+  sns.scatterplot(
+      x='pca1',
+      y='pca2',
+      hue='Cluster',
+      palette='deep',
+      data=df,
+  )
+  return f
 
 
 def plot_overfit_analysis(
-  x: pd.Series,
-  train_scores: pd.Series,
-  test_scores: pd.Series,
+  df: pd.DataFrame,
   x_label: str,
   y_label: str,
   title: str,
 ):
   f, ax = plt.subplots(figsize=(7, 5))
-  plt.plot(x, train_scores, '-o', label='Train')
-  plt.plot(x, test_scores, '-o', label='Test')
+  ax.set_title(title)
+  ax.set_xlabel(x_label)
+  ax.set_ylabel(y_label)
+
+  sns.lineplot('param_max_depth', 'mean_test_score', data=df, label='Test')
+  sns.lineplot('param_max_depth', 'mean_train_score', data=df, label='Train')
   plt.legend()
-  plt.grid()
-  ax.set_xlabel(x_label, fontsize = 15)
-  ax.set_ylabel(y_label, fontsize = 15)
-  ax.set_title(title, fontsize = 20)
-  return f.show()
+  return f
 
 
 if __name__ == '__main__':
