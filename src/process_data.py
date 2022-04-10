@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.impute import KNNImputer
 from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import VarianceThreshold
 
@@ -41,7 +41,7 @@ def calc_bigger_rel_diff_by_response(df: pd.DataFrame):
     .sort_values(ascending=False).index[0]
 
 
-def create_feature_accepted_any_cmp(df: pd.DataFrame):
+def create_feature_num_accepted_cmp(df: pd.DataFrame):
   campaigns = df.loc[:,'AcceptedCmp3':'AcceptedCmp2'].astype(int)
   df['NumAcceptedCmp'] = campaigns.apply(sum, axis=1)
   return df

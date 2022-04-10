@@ -16,7 +16,7 @@ def plot_corr_matrix(df: pd.DataFrame, title: str):
   cmap = sns.diverging_palette(20, 230, as_cmap=True)
 
   sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
-    square=True, linewidths=.5, cbar_kws={"shrink": .5})
+    square=True, linewidths=.5, cbar_kws={'shrink': .5})
   return f
 
 
@@ -64,8 +64,18 @@ def plot_overfit_analysis(
   ax.set_xlabel(x_label)
   ax.set_ylabel(y_label)
 
-  sns.lineplot('param_max_depth', 'mean_test_score', data=df, label='Test')
-  sns.lineplot('param_max_depth', 'mean_train_score', data=df, label='Train')
+  sns.lineplot(
+    x='param_max_depth',
+    y='mean_test_score',
+    data=df,
+    label='Test'
+  )
+  sns.lineplot(
+    x='param_max_depth',
+    y='mean_train_score',
+    data=df,
+    label='Train'
+  )
   plt.legend()
   return f
 

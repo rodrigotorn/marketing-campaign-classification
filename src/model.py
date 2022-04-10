@@ -16,16 +16,16 @@ def eval_model(x: pd.DataFrame, y: pd.Series, model):
 
 
 def grid_search_model(x: pd.DataFrame, y: pd.Series, model, params: dict):
-    grid_search = GridSearchCV(
-      model,
-      params,
-      scoring='balanced_accuracy',
-      n_jobs=-1,
-      cv=5,
-      return_train_score=True,
-    )
-    grid_search.fit(x, y)
-    return pd.DataFrame(grid_search.cv_results_)
+  grid_search = GridSearchCV(
+    model,
+    params,
+    scoring='balanced_accuracy',
+    n_jobs=-1,
+    cv=5,
+    return_train_score=True,
+  )
+  grid_search.fit(x, y)
+  return pd.DataFrame(grid_search.cv_results_)
 
 
 if __name__ == '__main__':
