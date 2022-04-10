@@ -28,7 +28,7 @@ def plot_boxplot(df: pd.DataFrame, feature: str, title: str):
 
 
 def plot_barplot_clusters(df: pd.DataFrame, features: list, title: str):
-  f, ax = plt.subplots(1, 3, figsize=(15, 5))
+  f, ax = plt.subplots(1, 3, figsize=(18, 5))
   f.suptitle(title)
 
   sns.barplot(ax=ax[0], x='Cluster', y=features[0], data=df)
