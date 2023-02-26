@@ -1,6 +1,6 @@
-# Ifood Case
+# Marketing Campaign Classification
 
-This repo's goal is to provide a solution to the case proposed by Ifood.
+This repo's goal is to identify which consumers should be chosen as marketing target based on how inclined they are to convert.
 
 The folders are organized as:
 
